@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
     <script src="https://cdn.jsdelivr.net/vue/1.0.16/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/g/vue@2.0.0-rc.4,vue.resource@1.0.0"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -14,10 +16,11 @@
     <div id="app" class="container text-center">
       <table class='table table-bordered table-striped table-hover'>
         <tr class='bg-danger text-light'>
-          <th style='width: 25%'>Refrigerante</th>
-          <th style='width: 25%'>Quantidade</th>
-          <th style='width: 25%'>Preço</th>
-          <th style='width: 25%'>Total</th>
+          <th>Refrigerante</th>
+          <th>Quantidade</th>
+          <th>Preço</th>
+          <th>Total</th>
+          <th>Curtidas</th>
         </tr>
         <tr v-for="n in nLinhas">
           <td>
@@ -26,9 +29,10 @@
               <option v-bind:value='refrigerante.id' v-for='refrigerante in refrigerantes'>{{refrigerante['sabor']}} {{refrigerante['quantidade']}}</option>
             </select>
           </td>
-          <td><input id=1 type='number' class='text-center' v-model.number='quantidade[n]' @keyup='changeRefrigerante(n)' placeholder='Digite a quantidade' style='padding: 3px;'> </td>
+          <td><input type='number' class='text-center' v-model.number='quantidade[n]' @keyup='changeRefrigerante(n)' placeholder='Digite a quantidade'> </td>
           <td><p type='text' class='text-center' >R$ {{preco[n]}}</p></td>
           <td><p type='text' class='text-center' placeholder='Cálcular o valor total'>R$ {{total[n]}}</p></td>
+          <td><p><i class="fa fa-heart"></i>  {{curtidas[n]}}  <i class="fa fa-heart"></i></p></td>
         </tr>
       </table>
       <button class='btn bg-danger text-light' @click='novoRefrigerante'>Novo Refrigerante</button>
@@ -44,7 +48,8 @@
           quantidade: [0, 0],
           preco: [0, 0],
           total: [0, 0],
-          nLinhas: 1
+          nLinhas: 1,
+          curtidas: [0, 0]
         }
       },
       created() {
@@ -56,9 +61,11 @@
       },
       methods: {
         changeRefrigerante: function(index) {
-          if(this.selected[index] != undefined && this.quantidade[index] != undefined && this.total[index] != undefined && this.refrigerantes[this.selected[index]] != undefined) {
-            this.$set(this.total, index, this.refrigerantes[this.selected[index]-1].valor * this.quantidade[index])
-            this.$set(this.preco, index, this.refrigerantes[this.selected[index]-1].valor)
+          var refriIndex = this.selected[index]-1
+          if(this.selected[index] != undefined && this.quantidade[index] != undefined && this.total[index] != undefined && this.refrigerantes[refriIndex] != undefined) {
+            this.$set(this.total, index, this.refrigerantes[refriIndex].valor * this.quantidade[index])
+            this.$set(this.preco, index, this.refrigerantes[refriIndex].valor)
+            this.$set(this.curtidas, index, this.refrigerantes[refriIndex].curtidas)
           }
         },
         novoRefrigerante: function() {
@@ -66,6 +73,7 @@
           this.quantidade.push(0)
           this.preco.push(0)
           this.total.push(0)
+          this.curtidas.push(0)
           this.nLinhas++;
         }
       }
