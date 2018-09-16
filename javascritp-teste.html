@@ -14,16 +14,18 @@
   <body>
     <div id="app" class="container text-center">
       <table id="table" class='table table-bordered table-striped table-hover table-responsive table-fixed'>
-        <thead>
-        <tr class='bg-danger text-light'>
+        <thead><tr class='bg-danger text-light'>
           <th>Refrigerante</th>
           <th>Quantidade</th>
           <th>Preço</th>
           <th>Total</th>
           <th>Curtidas</th>
+          <th>X</th>
+        </tr></thead>
+        <tr v-if="nLinhas <= 0">
+          <td colspan="6"><p>Nenhum refrigerante</p></td>
         </tr>
-      </thead>
-        <tr v-for="n in nLinhas">
+        <tr v-else v-for="n in nLinhas">
           <td>
             <select class='custom-select mr-sm-2' @change='changeRefrigerante(n)' v-model='selected[n]'>
               <option value='0' disabled selected>Escolha o refrigerante...</option>
@@ -33,17 +35,17 @@
           <td><input type='number' class='text-center' v-model.number='quantidade[n]' @keyup='changeRefrigerante(n)' placeholder='Digite a quantidade'> </td>
           <td><p type='text' class='text-center' >R$ {{preco[n]}}</p></td>
           <td><p type='text' class='text-center' placeholder='Cálcular o valor total'>R$ {{total[n]}}</p></td>
-          <td><p><i class="fa fa-heart"></i>  {{curtidas[n]}}  <i class="fa fa-heart"></i></p></td>
+          <td><p><i class="curtida fa fa-heart"></i>  {{curtidas[n]}}  <i class="curtida fa fa-heart"></i></p></td>
+          <td><button class="btn text-light circle-btn" @click="removerRefrigerante(n)"><i class="fa fa-times"></i></button></td>
         </tr>
       </table>
       <button class='btn bg-danger text-light' @click='novoRefrigerante(), scrollFim()'>Novo Refrigerante</button>
-      <span><H4 class="bg-danger text-light preco-totalitario">Preço Totalitário = R$ {{precoTotalitario}}</H4></span>
+      <h4 class="bg-danger text-light preco-totalitario">Preço Totalitário = R$ {{precoTotalitario}}</h4>
     </div>
     <script>
     new Vue({
       el: "#app",
-      data () {
-        return {
+      data: {
           refrigerantes: [],
           selected: [""],
           quantidade: [0],
@@ -52,16 +54,13 @@
           nLinhas: 7,
           curtidas: [0],
           precoTotalitario: 0
-        }
       },
-      created() {
+      created: function() {
         let vm = this
         this.$http.get('http://api.adsim.co/refrigerante/listar')
-        .then(response => {
-          vm.refrigerantes = response.data
-        })
+        .then(response => vm.refrigerantes = response.data)
       },
-      beforeMount() {
+      beforeMount: function() {
         for(i = 0; i < this.nLinhas; i++) {
           this.selected.push("");
           this.quantidade.push(0);
@@ -72,20 +71,28 @@
       },
       methods: {
         changeRefrigerante: function(index) {
-          var refriIndex = this.selected[index]-1
-          if(this.selected[index] != undefined && this.quantidade[index] != undefined && this.total[index] != undefined && this.refrigerantes[refriIndex] != undefined) {
+          var refriIndex = (this.selected[index]-1)
+          if(!([this.selected[index], this.quantidade[index], this.total[index], this.refrigerantes[refriIndex]]).includes(undefined)) {
             this.$set(this.total, index, this.refrigerantes[refriIndex].valor * this.quantidade[index])
             this.$set(this.preco, index, this.refrigerantes[refriIndex].valor)
             this.$set(this.curtidas, index, this.refrigerantes[refriIndex].curtidas)
           }
         },
         novoRefrigerante: function() {
-          this.selected.push()
+          this.selected.push("")
           this.quantidade.push(0)
           this.preco.push(0)
           this.total.push(0)
           this.curtidas.push(0)
           this.nLinhas++;
+        },
+        removerRefrigerante: function(index) {
+          this.selected.splice(index, 1)
+          this.quantidade.splice(index, 1)
+          this.preco.splice(index, 1)
+          this.total.splice(index, 1)
+          this.curtidas.splice(index, 1)
+          this.nLinhas--;
         },
         scrollFim: function() {
           this.$nextTick(() => {

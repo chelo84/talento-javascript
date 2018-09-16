@@ -1,7 +1,6 @@
 table {
   margin-top: 10mm;
   max-height: 510px;
-  overflow-y: overlay;
 }
 th {
   width: 25%;
@@ -9,7 +8,7 @@ th {
 input{
    padding: 3px;
 }
-i {
+.curtida {
   color: red;
 }
 .preco-totalitario {
@@ -17,4 +16,21 @@ i {
   margin-top: 3mm;
   padding-top: 2mm;
   padding-bottom: 2mm;
+}
+.circle-btn {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+  background-color: #dc3545 !important;
+}
+.circle-btn:hover {
+  background-color: #c9302c !important;
+}
+.circle-btn:focus {
+  box-shadow: none !important;
+  background-color: #dc3545 !important;
 }
