@@ -1,73 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-   <head>
-       <meta charset="utf-8"/>
-       <title>Adsim - Teste de JS</title>
-   </head>
-   <body>
-          	
-
-   		<table border="1" width="100%" >
-   			<tr>
-   				<td>Refrigerante</td>
-   				<td>Quantidade</td>
-   				<td>Preço</td>
-   				<td>Total</td>
-   			</tr>
-   			<tr>
-   				<td>
-	   				<select >
-	   					<option value="">Selecione um refrigerante</option>   					
-	   				</select>
-   				</td>
-   				<td><input type="text" placeholder="Digite a quantidade"  > </td>
-   				<td><input type="text" placeholder="Valor deve vir da consulta do Endpoint" > </td>
-   				<td><input type="text" placeholder="Cálcular o valor total" > </td>
-   			</tr>
-   			<tr>
-   				<td>
-	   				<select >
-	   					<option value="">Selecione um refrigerante</option>   					
-	   				</select>
-   				</td>
-   				<td><input type="text" placeholder="Digite a quantidade"  > </td>
-   				<td><input type="text" placeholder="Valor deve vir da consulta do Endpoint" > </td>
-   				<td><input type="text" placeholder="Cálcular o valor total" > </td>
-   			</tr>
-   			<tr>
-   				<td>
-	   				<select >
-	   					<option value="">Selecione um refrigerante</option>   					
-	   				</select>
-   				</td>
-   				<td><input type="text" placeholder="Digite a quantidade"  > </td>
-   				<td><input type="text" placeholder="Valor deve vir da consulta do Endpoint" > </td>
-   				<td><input type="text" placeholder="Cálcular o valor total" > </td>
-   			</tr>
-   			<tr>
-   				<td>
-	   				<select >
-	   					<option value="">Selecione um refrigerante</option>   					
-	   				</select>
-   				</td>
-   				<td><input type="text" placeholder="Digite a quantidade"  > </td>
-   				<td><input type="text" placeholder="Valor deve vir da consulta do Endpoint" > </td>
-   				<td><input type="text" placeholder="Cálcular o valor total" > </td>
-   			</tr>
-   			<tr>
-   				<td></td>
-   				<td></td>
-   				<td>TOTAL GERAL-></td>
-   				<td><input type="text" placeholder="Valor total da coluna" > </td>
-   			</tr>
-   		</table>
-
-   		<br>
-   		<br>
-   		<br>
-   		<br>
-   		<br>
-   		<br>
-
-   </body>
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/vue/1.0.16/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/g/vue@2.0.0-rc.4,vue.resource@1.0.0"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Adsim - Teste de JS</title>
+  </head>
+  <body>
+    <div id="app" class="container text-center">
+      <table class='table table-bordered table-striped table-hover'>
+        <tr class='bg-danger text-light'>
+          <th style='width: 25%'>Refrigerante</th>
+          <th style='width: 25%'>Quantidade</th>
+          <th style='width: 25%'>Preço</th>
+          <th style='width: 25%'>Total</th>
+        </tr>
+        <tr v-for="n in nLinhas">
+          <td>
+            <select class='custom-select mr-sm-2' @change='changeRefrigerante(n)' v-model='selected[n]'>
+              <option value='0' disabled selected>Escolha o refrigerante...</option>
+              <option v-bind:value='refrigerante.id' v-for='refrigerante in refrigerantes'>{{refrigerante['sabor']}} {{refrigerante['quantidade']}}</option>
+            </select>
+          </td>
+          <td><input id=1 type='number' class='text-center' v-model.number='quantidade[n]' @keyup='changeRefrigerante(n)' placeholder='Digite a quantidade' style='padding: 3px;'> </td>
+          <td><p type='text' class='text-center' >R$ {{preco[n]}}</p></td>
+          <td><p type='text' class='text-center' placeholder='Cálcular o valor total'>R$ {{total[n]}}</p></td>
+        </tr>
+      </table>
+      <button class='btn bg-danger text-light' @click='novoRefrigerante'>Novo Refrigerante</button>
+      <p>Preço Totalitário: </p>
+    </div>
+    <script>
+    new Vue({
+      el: "#app",
+      data () {
+        return {
+          refrigerantes: [],
+          selected: ["", ""],
+          quantidade: [0, 0],
+          preco: [0, 0],
+          total: [0, 0],
+          nLinhas: 1
+        }
+      },
+      created() {
+        let vm = this
+        axios.get('http://api.adsim.co/refrigerante/listar')
+        .then(response => {
+          vm.refrigerantes = response["data"]
+        })
+      },
+      methods: {
+        changeRefrigerante: function(index) {
+          if(this.selected[index] != undefined && this.quantidade[index] != undefined && this.total[index] != undefined && this.refrigerantes[this.selected[index]] != undefined) {
+            this.$set(this.total, index, this.refrigerantes[this.selected[index]-1].valor * this.quantidade[index])
+            this.$set(this.preco, index, this.refrigerantes[this.selected[index]-1].valor)
+          }
+        },
+        novoRefrigerante: function() {
+          this.selected.push()
+          this.quantidade.push(0)
+          this.preco.push(0)
+          this.total.push(0)
+          this.nLinhas++;
+        }
+      }
+    })
+    </script>
+  </body>
 </html>
