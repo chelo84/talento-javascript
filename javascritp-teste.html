@@ -8,7 +8,6 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://vuejs.org/js/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/g/vue@2.0.0-rc.4,vue.resource@1.0.0"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <title>Adsim - Teste de JS</title>
   </head>
@@ -28,7 +27,7 @@
           <td>
             <select class='custom-select mr-sm-2' @change='changeRefrigerante(n)' v-model='selected[n]'>
               <option value='0' disabled selected>Escolha o refrigerante...</option>
-              <option v-bind:value='refrigerante.id' v-for='refrigerante in refrigerantes'>{{refrigerante['sabor']}} {{refrigerante['quantidade']}}</option>
+              <option v-bind:value='refrigerante.id' v-for='refrigerante in refrigerantes'>{{refrigerante['marca']}} {{refrigerante['sabor']}} {{refrigerante['quantidade']}}</option>
             </select>
           </td>
           <td><input type='number' class='text-center' v-model.number='quantidade[n]' @keyup='changeRefrigerante(n)' placeholder='Digite a quantidade'> </td>
@@ -37,7 +36,7 @@
           <td><p><i class="fa fa-heart"></i>  {{curtidas[n]}}  <i class="fa fa-heart"></i></p></td>
         </tr>
       </table>
-      <button class='btn bg-danger text-light' @click='novoRefrigerante'>Novo Refrigerante</button>
+      <button class='btn bg-danger text-light' @click='novoRefrigerante(), scrollFim()'>Novo Refrigerante</button>
       <span><H4 class="bg-danger text-light preco-totalitario">Preço Totalitário = R$ {{precoTotalitario}}</H4></span>
     </div>
     <script>
@@ -57,7 +56,7 @@
       },
       created() {
         let vm = this
-        axios.get('http://api.adsim.co/refrigerante/listar')
+        this.$http.get('http://api.adsim.co/refrigerante/listar')
         .then(response => {
           vm.refrigerantes = response.data
         })
@@ -87,11 +86,13 @@
           this.total.push(0)
           this.curtidas.push(0)
           this.nLinhas++;
-        }
-      },
-      updated: function() {
+        },
+        scrollFim: function() {
+          this.$nextTick(() => {
           var table = document.getElementById("table");
           table.scrollTop = table.scrollHeight;
+        })
+        }
       },
       watch: {
         total() {
