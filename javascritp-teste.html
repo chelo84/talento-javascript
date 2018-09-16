@@ -5,16 +5,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="main.css">
-    <script src="https://cdn.jsdelivr.net/vue/1.0.16/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://vuejs.org/js/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/g/vue@2.0.0-rc.4,vue.resource@1.0.0"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <title>Adsim - Teste de JS</title>
   </head>
   <body>
     <div id="app" class="container text-center">
-      <table id="table" class='table table-bordered table-striped table-hover table-responsive'>
+      <table id="table" class='table table-bordered table-striped table-hover table-responsive table-fixed'>
+        <thead>
         <tr class='bg-danger text-light'>
           <th>Refrigerante</th>
           <th>Quantidade</th>
@@ -22,6 +23,7 @@
           <th>Total</th>
           <th>Curtidas</th>
         </tr>
+      </thead>
         <tr v-for="n in nLinhas">
           <td>
             <select class='custom-select mr-sm-2' @change='changeRefrigerante(n)' v-model='selected[n]'>
@@ -36,7 +38,7 @@
         </tr>
       </table>
       <button class='btn bg-danger text-light' @click='novoRefrigerante'>Novo Refrigerante</button>
-      <span><H4 class="bg-danger text-light precoTotalitario">Preço Totalitário = R$ {{precoTotalitario}}</H4></span>
+      <span><H4 class="bg-danger text-light preco-totalitario">Preço Totalitário = R$ {{precoTotalitario}}</H4></span>
     </div>
     <script>
     new Vue({
@@ -44,7 +46,7 @@
       data () {
         return {
           refrigerantes: [],
-          selected: ["", ""],
+          selected: [""],
           quantidade: [0],
           preco: [0],
           total: [0],
@@ -57,7 +59,7 @@
         let vm = this
         axios.get('http://api.adsim.co/refrigerante/listar')
         .then(response => {
-          vm.refrigerantes = response["data"]
+          vm.refrigerantes = response.data
         })
       },
       beforeMount() {
@@ -86,6 +88,10 @@
           this.curtidas.push(0)
           this.nLinhas++;
         }
+      },
+      updated: function() {
+          var table = document.getElementById("table");
+          table.scrollTop = table.scrollHeight;
       },
       watch: {
         total() {

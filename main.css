@@ -1,5 +1,7 @@
 table {
-  margin-top: 5mm;
+  margin-top: 10mm;
+  max-height: 510px;
+  overflow-y: overlay;
 }
 th {
   width: 25%;
@@ -10,7 +12,7 @@ input{
 i {
   color: red;
 }
-.precoTotalitario {
+.preco-totalitario {
   font-weight: bold;
   margin-top: 3mm;
   padding-top: 2mm;
