@@ -1,50 +1,5 @@
-# Bem vindo ao teste de JS da Adsim
+# Teste JavaScript Adsim
 
-Objetivo deste teste é medir seu conhecimento na área de HTML, javascript, css e boas práticas com essas tecnoligias.
+Solução desenvolvida em Html/CSS/JavaScript com Vuejs e Bootstrap
 
-Queremos que você elabore uma solução para o problema abaixo utilizando as tecnologias citadas acima.
-
-## O que você deve fazer?
-
-Através de uma consulta ao nosso webservice (abaixo), você deve fazer o seguinte:
-
-URI: http://api.adsim.co/refrigerante/listar
-
-Metodo: GET 
-
-Content-Type: application/json
-
-
-Com o resultado do webserver você deve preencher o combobox Refrigerante
-Ao selecionar um refrigerante no combobox, o campo Preço deve ser preenchido com o preço do refrigerante selecionado.
-Os campos totalizadores, precisam funcionar e considerar a quantidade de refrigerantes
-Inclusive, a experiência do usuário e código HTML e CSS estão horríveis (nos ajude nisso).
-
-#### BÔNUS: É possível adicionar uma novas linhas dinamicamente, com o mesmo comportamento descrito acima?
-O que usar e o que será avaliado?
-
-Você pode utilizar a seguintes tecnologias: 
-- React
-- Bootstrap
-- Vuejs
-- Angular2+
-
-
-## Será analisado
-
-- Boas práticas
-- Organização de código
-- Uso de css para melhorar a interface
-- Correções da estrutura html
-- Lógica para resolver o problema
-- Importante: Não é necessário uso de servidor web como apache e nginx.
-
-## Como fazer
-
-- Clone nosso repositório git (não faça Fork!)
-- Desenvolva o código em sua máquina local
-- Suba o código em seu repositório no Github
-- Envie o link do seu repositório para jonsnow@adsim.com.br
-- Caso não saiba como trabalhar com o Git, Envie um zip do seu código para joffrey@adsim.com.br
-
-#### Surpreenda-nos e boa sorte :) !
+Permite a escolha de um refrigerante e quantidade e é calculado o preço total daquele refrigerante e o total de todos os refrigerantes selecionados, e é possivel adicionar novas linhas para mais refrigerantes e também excluir linhas de refrigerantes.

@@ -60,15 +60,6 @@
         this.$http.get('http://api.adsim.co/refrigerante/listar')
         .then(response => vm.refrigerantes = response.data)
       },
-      beforeMount: function() {
-        for(i = 0; i < this.nLinhas; i++) {
-          this.selected.push("");
-          this.quantidade.push(0);
-          this.preco.push(0);
-          this.total.push(0);
-          this.curtidas.push(0);
-        }
-      },
       methods: {
         changeRefrigerante: function(index) {
           var refriIndex = (this.selected[index]-1)
@@ -78,12 +69,15 @@
             this.$set(this.curtidas, index, this.refrigerantes[refriIndex].curtidas)
           }
         },
-        novoRefrigerante: function() {
+        pushArrays() {
           this.selected.push("")
           this.quantidade.push(0)
           this.preco.push(0)
           this.total.push(0)
           this.curtidas.push(0)
+        },
+        novoRefrigerante: function() {
+          this.pushArrays()
           this.nLinhas++;
         },
         removerRefrigerante: function(index) {
@@ -99,6 +93,11 @@
           var table = document.getElementById("table");
           table.scrollTop = table.scrollHeight;
         })
+      }
+      },
+      beforeMount: function() {
+        for(i = 0; i < this.nLinhas; i++) {
+          this.pushArrays()
         }
       },
       watch: {
